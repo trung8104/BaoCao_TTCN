@@ -9,14 +9,18 @@ if ($qs !== '') {
 }
 require __DIR__ . '/../includes/header.php';
 ?>
-<h1 class="h3 mb-3">Kết quả tìm kiếm<?= $qs !== '' ? ': “' . e($qs) . '”' : '' ?></h1>
+<div class="calendar-intro">
+  <span class="eyebrow">TÌM TRONG CẨM NANG CÀ CHUA</span>
+  <h1>Kết quả tìm kiếm<?= $qs !== '' ? ': “' . e($qs) . '”' : '' ?></h1>
+  <p>Tìm trong bài hướng dẫn, hồ sơ sâu bệnh, nguyên nhân xử lý và triệu chứng trên cây.</p>
+</div>
 <?php if ($qs === ''): ?>
-  <div class="alert alert-light border">Nhập từ khóa vào ô tìm kiếm phía trên.</div>
+  <div class="empty-library"><span>⌕</span><div><h3>Bắt đầu với một dấu hiệu hoặc công việc trong vườn</h3><p>Ví dụ: lá vàng, mốc sương, tưới nước, bón phân hoặc tỉa cành.</p></div><a href="<?= url('public/pests.php') ?>">Tra cứu theo triệu chứng →</a></div>
 <?php else: ?>
-  <h2 class="h5 mt-4">Bài viết (<?= count($posts) ?>)</h2>
+  <div class="d-flex align-items-center justify-content-between mb-2"><h2 class="h5 mb-0">Bài hướng dẫn</h2><span class="small text-muted"><?= count($posts) ?> kết quả gần nhất</span></div>
   <?php if (!$posts): ?><p class="text-muted">Không có bài viết phù hợp.</p><?php endif; ?>
   <div class="row g-4 mb-4"><?php foreach ($posts as $p) include __DIR__ . '/_card.php'; ?></div>
-  <h2 class="h5 mt-4">Sâu bệnh (<?= count($pests) ?>)</h2>
+  <div class="d-flex align-items-center justify-content-between mt-4 mb-2"><h2 class="h5 mb-0">Sâu bệnh và dấu hiệu</h2><span class="small text-muted"><?= count($pests) ?> hồ sơ</span></div>
   <?php if (!$pests): ?><p class="text-muted">Không có sâu bệnh phù hợp.</p><?php endif; ?>
   <div class="list-group mb-4">
     <?php foreach ($pests as $p): ?>

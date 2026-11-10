@@ -25,18 +25,18 @@ function body_part_label($k) {
 function get_posts($f, $page = 1, $per = POSTS_PER_PAGE) {
     $where = ["p.status = 'published'"]; $params = [];
     if (!empty($f['q'])) {
-        $where[] = '(p.title LIKE ? OR p.summary LIKE ? OR p.content LIKE ?)';
-        $l = like_escape($f['q']); array_push($params, $l, $l, $l);
+        $where[] = '(p.title LIKE ? OR p.summary LIKE ? OR p.content LIKE ? OR c.name LIKE ? OR s.name LIKE ?)';
+        $l = like_escape($f['q']); array_push($params, $l, $l, $l, $l, $l);
     }
     if (!empty($f['category'])) { $where[] = 'p.category_id = ?'; $params[] = (int)$f['category']; }
     if (!empty($f['stage']))    { $where[] = 'p.growth_stage_id = ?'; $params[] = (int)$f['stage']; }
     $w = implode(' AND ', $where);
-    $total = (int)q("SELECT COUNT(*) FROM posts p WHERE $w", $params)->fetchColumn();
+    $joins = ' JOIN categories c ON c.id = p.category_id LEFT JOIN growth_stages s ON s.id = p.growth_stage_id';
+    $total = (int)q("SELECT COUNT(*) FROM posts p $joins WHERE $w", $params)->fetchColumn();
     $off = max(0, ($page - 1) * $per);
     $rows = q("SELECT p.id, p.title, p.slug, p.summary, p.thumbnail, p.created_at, p.views,
                       c.name AS category_name, s.name AS stage_name
-               FROM posts p JOIN categories c ON c.id = p.category_id
-               LEFT JOIN growth_stages s ON s.id = p.growth_stage_id
+               FROM posts p $joins
                WHERE $w ORDER BY p.created_at DESC, p.id DESC LIMIT " . (int)$per . " OFFSET $off", $params)->fetchAll();
     return [$rows, $total];
 }
@@ -72,7 +72,12 @@ function search_pests($f) {
         $params = $sym;
     }
     $where = ['1=1'];
-    if (!empty($f['q'])) { $where[] = '(p.name LIKE ? OR p.description LIKE ?)'; $l = like_escape($f['q']); array_push($params, $l, $l); }
+    if (!empty($f['q'])) {
+        $where[] = '(p.name LIKE ? OR p.description LIKE ? OR p.cause LIKE ? OR p.prevention LIKE ? OR p.treatment LIKE ? OR EXISTS (
+            SELECT 1 FROM pest_symptoms psq JOIN symptoms sq ON sq.id = psq.symptom_id
+            WHERE psq.pest_id = p.id AND sq.name LIKE ?))';
+        $l = like_escape($f['q']); array_push($params, $l, $l, $l, $l, $l, $l);
+    }
     if (!empty($f['type']) && in_array($f['type'], ['pest', 'disease'], true)) { $where[] = 'p.type = ?'; $params[] = $f['type']; }
     $w = implode(' AND ', $where);
     $having = $sym ? 'HAVING matched > 0' : '';

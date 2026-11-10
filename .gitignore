@@ -1,7 +1,8 @@
-﻿/config/config.php
-/uploads/*
-!/uploads/.gitkeep
-/.sessions/
+config/config.php
+uploads/*
+!uploads/.gitkeep
+!uploads/.htaccess
+.sessions/
 *.log
 .DS_Store
 Thumbs.db
