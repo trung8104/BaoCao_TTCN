@@ -1,0 +1,19 @@
+erDiagram
+    roles ||--o{ users : "co"
+    users ||--o{ posts : "viet"
+    users ||--o{ images : "tai len"
+    categories ||--o{ posts : "chua"
+    growth_stages ||--o{ posts : "thuoc"
+    posts ||--o{ images : "co"
+    pests ||--o{ images : "co"
+    pests ||--o{ pest_symptoms : "co"
+    symptoms ||--o{ pest_symptoms : "thuoc"
+    roles { int id PK  string name }
+    users { int id PK  int role_id FK  string username  string password_hash  string full_name  string email  bool is_active }
+    categories { int id PK  string name  string slug  int sort_order }
+    growth_stages { int id PK  string name  string slug  int sort_order }
+    posts { int id PK  int category_id FK  int growth_stage_id FK  int author_id FK  string title  string slug  text content  string status }
+    pests { int id PK  string name  string slug  string type  text description  text cause  text prevention  text treatment }
+    symptoms { int id PK  string name  string body_part }
+    pest_symptoms { int pest_id PK  int symptom_id PK }
+    images { int id PK  string file_path  int post_id FK  int pest_id FK  int uploaded_by FK }

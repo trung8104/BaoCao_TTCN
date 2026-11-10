@@ -1,0 +1,76 @@
+SET NAMES utf8mb4;
+-- DỮ LIỆU MẪU để chạy thử website. Import SAU database.sql.
+-- Đây là nội dung khái quát để minh họa; Giang cần thay bằng tài liệu có nguồn trích dẫn rõ ràng
+-- (Viện Rau quả, Trung tâm Khuyến nông, Cục Bảo vệ thực vật...) trước khi nộp báo cáo.
+USE tomato_guide;
+
+INSERT INTO posts (category_id, growth_stage_id, title, slug, summary, content, source, status) VALUES
+((SELECT id FROM categories WHERE slug='gioi-thieu-giong'), NULL,
+ 'Giới thiệu cây cà chua và các nhóm giống phổ biến', 'gioi-thieu-cay-ca-chua-va-cac-nhom-giong',
+ 'Tìm hiểu đặc điểm cây cà chua và cách chọn nhóm giống phù hợp với điều kiện trồng của bạn.',
+ 'Cà chua (Solanum lycopersicum) thuộc họ Cà, là cây rau ăn quả được trồng phổ biến ở nhiều vùng của Việt Nam.\n\n## Chọn giống theo kiểu sinh trưởng\n- Giống sinh trưởng hữu hạn: cây thấp, ra hoa quả tập trung, thu hoạch trong thời gian ngắn, ít cần giàn cao.\n- Giống sinh trưởng vô hạn: cây leo cao, ra hoa quả liên tục, cần giàn và tỉa cành, thu hoạch kéo dài nhiều đợt.\n\n## Chọn giống theo kích cỡ quả\n- Cà chua bi (quả nhỏ): ăn tươi, năng suất cao trên mỗi cây.\n- Cà chua quả to: dùng nấu ăn và chế biến.\n\n## Lưu ý khi chọn giống\nNên chọn hạt giống rõ nguồn gốc, phù hợp mùa vụ và vùng trồng, ưu tiên giống có khả năng chống chịu một số bệnh phổ biến tại địa phương. Hãy tham khảo cán bộ khuyến nông để biết giống phù hợp.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo', 'published'),
+((SELECT id FROM categories WHERE slug='gieo-hat-uom-cay'), (SELECT id FROM growth_stages WHERE slug='gieo-uom'),
+ 'Gieo hạt và ươm cây con cà chua', 'gieo-hat-va-uom-cay-con-ca-chua',
+ 'Các bước gieo hạt, chăm sóc cây con và nhận biết khi nào cây đủ tuổi đem trồng.',
+ 'Cây con khỏe là nền tảng cho cả vụ cà chua. Giai đoạn ươm thường kéo dài khoảng 3–4 tuần tùy giống và thời tiết.\n\n## Chuẩn bị giá thể\nDùng giá thể tơi xốp, thoát nước tốt, sạch mầm bệnh. Có thể trộn đất sạch, phân hữu cơ hoai mục và trấu hun hoặc xơ dừa.\n\n## Gieo hạt\n- Gieo vào khay hoặc bầu, phủ một lớp giá thể mỏng.\n- Giữ ẩm đều, tránh để úng nước.\n- Hạt thường nảy mầm sau vài ngày.\n\n## Chăm sóc cây con\nĐặt cây nơi nhiều ánh sáng, tưới nhẹ vào sáng sớm. Tỉa bớt cây yếu nếu gieo quá dày để cây không bị vống.\n\n## Khi nào đem trồng\nKhi cây có khoảng 4–6 lá thật, thân cứng cáp. Nên cho cây làm quen với nắng ngoài trời vài ngày trước khi trồng ra vườn.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo', 'published'),
+((SELECT id FROM categories WHERE slug='trong-lam-gian-tia-canh'), (SELECT id FROM growth_stages WHERE slug='sinh-truong'),
+ 'Làm giàn và tỉa cành cà chua', 'lam-gian-va-tia-canh-ca-chua',
+ 'Vì sao cần làm giàn, cách tỉa chồi nách và tỉa lá để cây thông thoáng, ít bệnh.',
+ 'Giàn và tỉa cành giúp cây đứng vững, quả không chạm đất và vườn thông thoáng hơn.\n\n## Làm giàn\nVới giống vô hạn, cắm cọc hoặc làm giàn cao để buộc thân. Buộc lỏng tay, dịch dây theo chiều cao của cây.\n\n## Tỉa chồi nách\n- Chồi nách mọc ở nách giữa thân và cuống lá.\n- Với giống vô hạn, thường tỉa để giữ 1–2 thân chính.\n- Tỉa vào buổi sáng nắng ráo để vết cắt mau khô.\n\n## Tỉa lá già\nCắt bớt lá già, lá vàng ở phía gốc để tăng thông thoáng và giảm nguy cơ bệnh. Dụng cụ cắt nên được vệ sinh trước khi dùng cho cây khác.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo', 'published'),
+((SELECT id FROM categories WHERE slug='tuoi-nuoc-bon-phan'), (SELECT id FROM growth_stages WHERE slug='ra-hoa-dau-qua'),
+ 'Nguyên tắc tưới nước và bón phân theo giai đoạn', 'nguyen-tac-tuoi-nuoc-va-bon-phan',
+ 'Tưới đều, bón đúng giai đoạn giúp cây ra hoa đậu quả tốt và hạn chế rối loạn sinh lý.',
+ 'Cà chua cần ẩm đều. Tưới lúc khô lúc úng dễ làm rụng hoa, nứt quả và gây thối đáy quả.\n\n## Tưới nước\n- Tưới vào gốc, hạn chế làm ướt lá để giảm bệnh.\n- Giữ ẩm đều, nhất là giai đoạn ra hoa và nuôi quả.\n- Có thể phủ gốc để giữ ẩm và hạn chế cỏ.\n\n## Bón phân\n- Bón lót bằng phân hữu cơ hoai mục khi làm đất.\n- Giai đoạn cây con và sinh trưởng thân lá cần nhiều đạm hơn.\n- Giai đoạn ra hoa, nuôi quả cần chú ý kali và canxi.\n\nLiều lượng cụ thể phụ thuộc loại phân và chất đất, hãy làm theo hướng dẫn trên bao bì và tư vấn của cán bộ khuyến nông.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo', 'published'),
+((SELECT id FROM categories WHERE slug='thu-hoach-bao-quan'), (SELECT id FROM growth_stages WHERE slug='thu-hoach'),
+ 'Thu hoạch và bảo quản cà chua', 'thu-hoach-va-bao-quan-ca-chua',
+ 'Thời điểm hái quả và cách bảo quản để cà chua giữ chất lượng lâu hơn.',
+ 'Thu hoạch đúng lúc giúp quả ngon và bảo quản được lâu hơn.\n\n## Thu hoạch\n- Hái khi quả bắt đầu chuyển màu chín, tùy mục đích dùng ngay hay vận chuyển xa.\n- Hái vào buổi sáng mát, nhẹ tay, giữ lại cuống nếu có thể.\n- Loại bỏ quả dập, nứt, sâu bệnh.\n\n## Bảo quản\n- Để nơi thoáng mát, tránh nắng trực tiếp.\n- Không xếp chồng quá cao để tránh dập.\n- Quả còn xanh nên để chín tự nhiên ở nhiệt độ phòng.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo', 'published');
+
+INSERT INTO pests (name, slug, type, description, cause, prevention, treatment, source) VALUES
+('Bệnh mốc sương', 'benh-moc-suong', 'disease',
+ 'Bệnh thường phát triển nhanh khi thời tiết mát, ẩm, nhiều sương. Vết bệnh xuất hiện trên lá, thân và quả.',
+ 'Do nấm hại (Phytophthora infestans), lây lan qua gió và nước mưa.',
+ '- Chọn giống có khả năng chống chịu nếu có.\n- Trồng thông thoáng, tỉa lá già.\n- Tưới vào gốc, tránh làm ướt lá.\n- Thu gom và tiêu hủy tàn dư cây bệnh.',
+ '- Cắt bỏ và tiêu hủy phần bị bệnh sớm.\n- Khi cần dùng thuốc, chọn thuốc đã đăng ký cho cà chua và làm theo hướng dẫn trên nhãn hoặc của cán bộ bảo vệ thực vật.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo'),
+('Bệnh héo xanh vi khuẩn', 'benh-heo-xanh-vi-khuan', 'disease',
+ 'Cây đang xanh bỗng héo rũ nhanh, ban đầu có thể phục hồi vào chiều tối rồi héo hẳn. Bệnh khó chữa khi đã xuất hiện.',
+ 'Do vi khuẩn sống trong đất, xâm nhập qua rễ, phát triển mạnh khi đất ẩm, nóng.',
+ '- Luân canh với cây không thuộc họ Cà.\n- Làm đất thoát nước tốt.\n- Dùng giống hoặc gốc ghép chống chịu nếu có.\n- Vệ sinh dụng cụ, tránh làm tổn thương rễ.',
+ '- Nhổ bỏ cây bệnh sớm, mang ra xa vườn để tiêu hủy.\n- Xử lý hố đất nơi cây bệnh theo hướng dẫn của cán bộ bảo vệ thực vật.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo'),
+('Sâu đục quả', 'sau-duc-qua', 'pest',
+ 'Sâu non đục vào quả, ăn phần thịt bên trong, làm quả thối và giảm giá trị thương phẩm.',
+ 'Do sâu non của một số loài bướm đêm, đẻ trứng trên lá, hoa và quả non.',
+ '- Vệ sinh vườn, thu gom quả bị hại.\n- Luân canh, trồng xen cây xua đuổi nếu phù hợp.\n- Dùng lưới che ở quy mô nhỏ.',
+ '- Kiểm tra vườn thường xuyên, bắt sâu thủ công khi mật độ thấp.\n- Khi cần dùng thuốc, ưu tiên chế phẩm ít độc và làm theo hướng dẫn của cán bộ bảo vệ thực vật.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo'),
+('Thối đáy quả (rối loạn sinh lý)', 'thoi-day-qua', 'disease',
+ 'Đáy quả xuất hiện vết úng nước rồi chuyển đen, lõm. Đây là rối loạn sinh lý, không phải do mầm bệnh lây từ cây khác.',
+ 'Liên quan đến cây không hấp thu đủ canxi, thường do tưới thất thường, đất quá khô hoặc quá úng, bón thừa đạm.',
+ '- Tưới nước đều, giữ ẩm ổn định.\n- Bón phân cân đối, không bón thừa đạm.\n- Bổ sung canxi theo hướng dẫn khi đất thiếu.',
+ '- Loại bỏ quả bị hại để cây tập trung nuôi quả khác.\n- Điều chỉnh chế độ tưới và bón phân.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo'),
+('Bệnh xoăn lá do virus', 'benh-xoan-la-do-virus', 'disease',
+ 'Lá non co rút, xoăn lên, cây chậm lớn, ra hoa đậu quả kém. Bệnh không có thuốc chữa.',
+ 'Do virus, thường lây truyền qua côn trùng chích hút như bọ phấn.',
+ '- Kiểm soát bọ phấn trong vườn ươm và ngoài vườn.\n- Dùng lưới che cho vườn ươm.\n- Chọn giống chống chịu nếu có.',
+ '- Nhổ bỏ cây bệnh sớm và tiêu hủy.\n- Kiểm soát côn trùng truyền bệnh theo hướng dẫn của cán bộ bảo vệ thực vật.',
+ 'Nội dung mẫu – cần bổ sung nguồn tham khảo');
+
+INSERT INTO pest_symptoms (pest_id, symptom_id) VALUES
+((SELECT id FROM pests WHERE slug='benh-moc-suong'),        (SELECT id FROM symptoms WHERE name='Đốm nâu trên lá')),
+((SELECT id FROM pests WHERE slug='benh-moc-suong'),        (SELECT id FROM symptoms WHERE name='Thân thối hoặc có vết nâu')),
+((SELECT id FROM pests WHERE slug='benh-moc-suong'),        (SELECT id FROM symptoms WHERE name='Lớp phấn trắng hoặc mốc xám trên lá')),
+((SELECT id FROM pests WHERE slug='benh-heo-xanh-vi-khuan'),(SELECT id FROM symptoms WHERE name='Lá héo rũ')),
+((SELECT id FROM pests WHERE slug='benh-heo-xanh-vi-khuan'),(SELECT id FROM symptoms WHERE name='Thân thối hoặc có vết nâu')),
+((SELECT id FROM pests WHERE slug='sau-duc-qua'),           (SELECT id FROM symptoms WHERE name='Quả có lỗ đục, bị sâu ăn')),
+((SELECT id FROM pests WHERE slug='thoi-day-qua'),          (SELECT id FROM symptoms WHERE name='Đốm đen hoặc thối ở đáy quả')),
+((SELECT id FROM pests WHERE slug='benh-xoan-la-do-virus'), (SELECT id FROM symptoms WHERE name='Lá xoăn, co rút')),
+((SELECT id FROM pests WHERE slug='benh-xoan-la-do-virus'), (SELECT id FROM symptoms WHERE name='Cây chậm lớn, còi cọc')),
+((SELECT id FROM pests WHERE slug='benh-xoan-la-do-virus'), (SELECT id FROM symptoms WHERE name='Hoa rụng, không đậu quả'));
