@@ -4,6 +4,18 @@ require_login();
 $id = (int)($_GET['id'] ?? 0);
 $post = $id ? q("SELECT * FROM posts WHERE id = ?", [$id])->fetch() : null;
 if ($id && !$post) { flash('error', 'Không tìm thấy bài viết.'); redirect('admin/posts.php'); }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'upload_pasted_image') {
+    header('Content-Type: application/json; charset=utf-8');
+    csrf_verify();
+    try {
+        if (empty($_FILES['image'])) throw new RuntimeException('Không nhận được ảnh cần tải lên.');
+        echo json_encode(['file' => save_uploaded_image($_FILES['image'])]);
+    } catch (RuntimeException $ex) {
+        http_response_code(422);
+        echo json_encode(['error' => $ex->getMessage()]);
+    }
+    exit;
+}
 $cats = q("SELECT id, name FROM categories ORDER BY sort_order, name")->fetchAll();
 $stages = q("SELECT id, name FROM growth_stages ORDER BY sort_order, name")->fetchAll();
 $errors = [];
@@ -91,6 +103,7 @@ require __DIR__ . '/../includes/admin_header.php';
       <textarea class="form-control" id="summary" name="summary" rows="2" maxlength="500"><?= e($data['summary']) ?></textarea></div>
     <div class="mb-3"><label class="form-label fw-semibold" for="content">Nội dung *</label>
       <textarea class="form-control" id="content" name="content" rows="16" required><?= e($data['content']) ?></textarea>
+      <div id="content-paste-status" class="form-text" role="status">Bạn có thể dán ảnh đã sao chép; ảnh sẽ được chèn tại vị trí con trỏ.</div>
       <div class="form-text">Định dạng: dòng bắt đầu bằng <code>## </code> là tiêu đề mục; dòng bắt đầu bằng <code>- </code> là gạch đầu dòng; để trống một dòng để xuống đoạn mới.</div></div>
     <div class="mb-0"><label class="form-label fw-semibold" for="source">Nguồn tham khảo</label>
       <input class="form-control" id="source" name="source" maxlength="255" value="<?= e($data['source']) ?>" placeholder="Tên tài liệu, cơ quan, năm"></div>
@@ -121,15 +134,66 @@ require __DIR__ . '/../includes/admin_header.php';
       <div id="thPrev" class="mt-2"></div>
       <div class="form-text">JPG, PNG, GIF, WEBP, tối đa <?= round(config()['upload_max_bytes'] / 1048576, 1) ?> MB.</div>
     </div></div>
-    <div class="card"><div class="card-body">
-      <label class="form-label fw-semibold" for="images">Ảnh minh họa trong bài</label>
-      <input class="form-control" type="file" id="images" name="images[]" accept="image/*" multiple data-preview="#imgPrev">
-      <div id="imgPrev" class="mt-2"></div>
-      <?php if ($images): ?><div class="row g-2 mt-1">
-        <?php foreach ($images as $im): ?><div class="col-6 img-tile"><img src="<?= e(upload_url($im['file_path'])) ?>" alt="">
-          <div class="form-check"><input class="form-check-input" type="checkbox" name="delete_images[]" value="<?= (int)$im['id'] ?>" id="di<?= (int)$im['id'] ?>"><label class="form-check-label small" for="di<?= (int)$im['id'] ?>">Xóa</label></div></div><?php endforeach; ?>
-      </div><?php endif; ?>
-    </div></div>
+    
   </div>
+  </div></div>
 </form>
+<script>
+(() => {
+  const editor = document.getElementById('content');
+  const status = document.getElementById('content-paste-status');
+  const csrf = document.querySelector('input[name="csrf"]').value;
+  let pendingUploads = 0;
+
+  editor.form.addEventListener('submit', (event) => {
+    if (pendingUploads > 0) {
+      event.preventDefault();
+      status.textContent = 'Vui lòng đợi ảnh tải lên xong rồi lưu bài viết.';
+    }
+  });
+
+  editor.addEventListener('paste', async (event) => {
+    const image = Array.from(event.clipboardData.items)
+      .find((item) => item.type.startsWith('image/'));
+    if (!image) return;
+
+    event.preventDefault();
+    const file = image.getAsFile();
+    if (!file) {
+      status.textContent = 'Không đọc được ảnh trong clipboard.';
+      return;
+    }
+
+    const marker = `[[uploading:${Date.now()}-${Math.random().toString(16).slice(2)}]]`;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    editor.setRangeText(marker, start, end, 'end');
+    editor.focus();
+    pendingUploads++;
+    status.textContent = 'Đang tải ảnh lên...';
+
+    try {
+      const body = new FormData();
+      body.append('action', 'upload_pasted_image');
+      body.append('csrf', csrf);
+      body.append('image', file, file.name || 'pasted-image');
+      const response = await fetch(window.location.href, {
+        method: 'POST',
+        body,
+        credentials: 'same-origin'
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Không tải được ảnh lên.');
+
+      editor.value = editor.value.replace(marker, `[[image:${result.file}]]`);
+      status.textContent = 'Đã chèn ảnh tại vị trí con trỏ.';
+    } catch (error) {
+      editor.value = editor.value.replace(marker, '');
+      status.textContent = error.message || 'Không tải được ảnh lên.';
+    } finally {
+      pendingUploads--;
+    }
+  });
+})();
+</script>
 <?php require __DIR__ . '/../includes/admin_footer.php'; ?>
