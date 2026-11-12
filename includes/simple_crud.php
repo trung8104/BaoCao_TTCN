@@ -24,6 +24,15 @@ function simple_crud(array $cfg) {
             catch (PDOException $ex) { flash('error', $cfg['in_use_msg'] ?? 'Không xóa được vì đang được sử dụng.'); }
             redirect($cfg['self']);
         }
+        if ($action === 'delete_all') {
+            try {
+                $deleted = q("DELETE FROM $table")->rowCount();
+                flash($deleted ? 'success' : 'info', $deleted ? 'Đã xóa tất cả mục.' : 'Không có mục nào để xóa.');
+            } catch (PDOException $ex) {
+                flash('error', $cfg['in_use_msg'] ?? 'Không xóa được vì đang có mục được sử dụng.');
+            }
+            redirect($cfg['self']);
+        }
         foreach ($fields as $k => $f) $data[$k] = trim($_POST[$k] ?? '');
         foreach ($fields as $k => $f) if (!empty($f['required']) && $data[$k] === '') $errors[] = $f['label'] . ' không được để trống.';
         if (isset($fields['body_part']) && !isset($fields['body_part']['options'][$data['body_part']])) $errors[] = 'Bộ phận không hợp lệ.';
@@ -73,7 +82,14 @@ function simple_crud(array $cfg) {
           <td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-primary" href="<?= url($cfg['self'] . '?edit=' . (int)$r['id']) ?>">Sửa</a>
             <form method="post" class="d-inline" data-confirm="Xóa mục này?"><?= csrf_field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
               <button class="btn btn-sm btn-outline-danger">Xóa</button></form></td></tr>
-        <?php endforeach; ?></tbody></table></div></div>
+        <?php endforeach; ?></tbody></table></div>
+        <div class="d-flex justify-content-end mt-3">
+          <form method="post" data-confirm="Xóa tất cả mục trong danh sách? Thao tác này không thể hoàn tác."><?= csrf_field() ?>
+            <input type="hidden" name="action" value="delete_all">
+            <button class="btn btn-danger">Xóa tất cả</button>
+          </form>
+        </div>
+      </div>
     </div>
     <?php
     require __DIR__ . '/admin_footer.php';
