@@ -1,10 +1,12 @@
 # Default administrator login
 
-For a fresh database imported from `database.sql`, the default account is:
+The initial administrator account is fixed:
 
 - Username: `admin`
-- Password: `admin123`
+- Password: `Tomato@123`
 
-Change this password after your first login. The SQL seed uses `INSERT IGNORE`, so importing `database.sql` again does not reset the password of an account that already exists.
+Import `database.sql` through phpMyAdmin for both a fresh database and an existing database. On import, its admin seed creates the account if missing or resets the admin password to `Tomato@123`.
 
-Alternatively, `setup_admin.php` creates an administrator with a random password when the `users` table is empty, then prints that password once. It refuses to run if any user already exists. Remove `setup_admin.php` from the server after setup.
+The database stores a PHP password hash. Normal page loads and login requests do not create or replace the account password. Only importing `database.sql` sets the admin password to the fixed default. `setup_admin.php` only creates the account when `admin` is missing. Remove that setup file after installation.
+
+To choose a different fixed password, generate a new hash with PHP's `password_hash()` and update the hash in `database.sql` before importing it.
