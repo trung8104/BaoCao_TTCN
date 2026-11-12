@@ -1,7 +1,7 @@
 -- ============================================================================
 -- So tay huong dan canh tac ca chua
 -- MySQL 5.7+ / MariaDB 10.3+, InnoDB, UTF-8
--- Import file nay truoc sample_data.sql va setup_admin.php.
+-- Import file nay truoc sample_data.sql.
 -- ============================================================================
 
 CREATE DATABASE IF NOT EXISTS tomato_guide
@@ -205,8 +205,12 @@ INSERT IGNORE INTO symptoms (name, body_part) VALUES
   ('Rễ thối, cây còi cọc', 'root'),
   ('Cây chậm lớn, còi cọc', 'whole_plant');
 
--- Tai khoan quan tri duoc tao rieng bang setup_admin.php.
--- Khong luu mat khau thuong trong file SQL.
+-- Tai khoan mac dinh: admin / admin123. Hash duoc tao san bang password_hash().
+-- INSERT IGNORE giu nguyen tai khoan/mat khau neu import lai file nay.
+INSERT IGNORE INTO users (role_id, username, password_hash, full_name)
+SELECT id, 'admin', '$2y$10$DqVnLEIRzENbfniP2iYs6ui5QWirclp3Wx5oboIbvWSKtWSMbypCS', 'Quan tri vien'
+FROM roles
+WHERE name = 'admin';
 
 -- Truy van goi y:
 -- 1. Tim sau benh khop voi cac trieu chung da chon:

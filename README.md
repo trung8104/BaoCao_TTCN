@@ -7,7 +7,7 @@ Website thông tin về canh tác cà chua, gồm trang người xem và trang q
 2. Bật **Apache** và **MySQL** trong XAMPP Control Panel.
 3. Mở http://localhost/phpmyadmin → tab **Nhập (Import)** → chọn `database.sql` → Thực hiện.
 4. (Tùy chọn) Import tiếp `sample_data.sql` để có 5 bài viết và 5 sâu bệnh mẫu chạy thử.
-5. Mở http://localhost/tomato-guide/setup_admin.php để tạo tài khoản admin. Ghi lại mật khẩu hiển thị, rồi **xóa file `setup_admin.php`**.
+5. Tài khoản admin đã được tạo khi import `database.sql`. Đăng nhập với `admin` / `admin123`, sau đó đổi mật khẩu trong mục **Tài khoản**.
 6. Xem website: http://localhost/tomato-guide/ — Quản trị: http://localhost/tomato-guide/admin/login.php
 
 Cần internet khi chạy vì Bootstrap tải từ CDN. Mật khẩu MySQL mặc định của XAMPP là rỗng; nếu khác, sửa `config/config.php`.
