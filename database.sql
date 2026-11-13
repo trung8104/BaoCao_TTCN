@@ -142,14 +142,12 @@ CREATE TABLE IF NOT EXISTS images (
     FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Du lieu danh muc co the nap lai ma khong tao ban ghi trung.
+-- Tao vai tro admin de tai khoan mac dinh co the lien ket.
 INSERT INTO roles (name, description) VALUES
-  ('admin', 'Quan tri vien: toan quyen, quan ly tai khoan'),
-  ('editor', 'Bien tap vien: them va sua noi dung')
+  ('admin', 'Quan tri vien: toan quyen, quan ly tai khoan')
 ON DUPLICATE KEY UPDATE description = VALUES(description);
 
 -- Tai khoan mac dinh: admin / Tomato@123.
--- Import database.sql se tao hoac dat lai tai khoan admin nay.
 INSERT INTO users (role_id, username, password_hash, full_name)
 SELECT r.id, 'admin',
        '$2y$10$cZliAWxH2dLw7AxS8akYv.sQVgb/ylL.AAOKYyaVAtan50i7bA9by',
@@ -161,49 +159,3 @@ ON DUPLICATE KEY UPDATE
   password_hash = VALUES(password_hash),
   full_name = VALUES(full_name),
   is_active = 1;
-
-INSERT INTO categories (name, slug, sort_order) VALUES
-  ('Giới thiệu cây cà chua và các giống phổ biến', 'gioi-thieu-giong', 1),
-  ('Chuẩn bị đất và làm đất', 'chuan-bi-dat', 2),
-  ('Gieo hạt và ươm cây con', 'gieo-hat-uom-cay', 3),
-  ('Trồng, làm giàn, tỉa cành', 'trong-lam-gian-tia-canh', 4),
-  ('Tưới nước và bón phân', 'tuoi-nuoc-bon-phan', 5),
-  ('Sâu bệnh hại và cách phòng trừ', 'sau-benh-hai', 6),
-  ('Thu hoạch và bảo quản', 'thu-hoach-bao-quan', 7)
-ON DUPLICATE KEY UPDATE
-  name = VALUES(name),
-  sort_order = VALUES(sort_order);
-
-INSERT INTO growth_stages (name, slug, sort_order) VALUES
-  ('Chuẩn bị đất', 'chuan-bi-dat', 1),
-  ('Gieo hạt, ươm cây con', 'gieo-uom', 2),
-  ('Cây con sau trồng', 'cay-con', 3),
-  ('Sinh trưởng thân lá', 'sinh-truong', 4),
-  ('Ra hoa, đậu quả', 'ra-hoa-dau-qua', 5),
-  ('Thu hoạch', 'thu-hoach', 6)
-ON DUPLICATE KEY UPDATE
-  name = VALUES(name),
-  sort_order = VALUES(sort_order);
-
-INSERT INTO symptoms (name, body_part) VALUES
-  ('Lá vàng', 'leaf'),
-  ('Lá héo rũ', 'leaf'),
-  ('Lá xoăn, co rút', 'leaf'),
-  ('Đốm nâu trên lá', 'leaf'),
-  ('Lớp phấn trắng hoặc mốc xám trên lá', 'leaf'),
-  ('Thân thối hoặc có vết nâu', 'stem'),
-  ('Hoa rụng, không đậu quả', 'flower'),
-  ('Đốm đen hoặc thối ở đáy quả', 'fruit'),
-  ('Quả nứt', 'fruit'),
-  ('Quả có lỗ đục, bị sâu ăn', 'fruit'),
-  ('Rễ thối, cây còi cọc', 'root'),
-  ('Cây chậm lớn, còi cọc', 'whole_plant')
-ON DUPLICATE KEY UPDATE body_part = VALUES(body_part);
-
--- Truy van mau: xep sau benh theo so trieu chung khop.
--- SELECT p.*, COUNT(*) AS matched
--- FROM pests AS p
--- JOIN pest_symptoms AS ps ON ps.pest_id = p.id
--- WHERE ps.symptom_id IN (?, ?, ?)
--- GROUP BY p.id
--- ORDER BY matched DESC;
