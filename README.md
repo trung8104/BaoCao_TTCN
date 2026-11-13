@@ -13,7 +13,7 @@ Website thông tin về canh tác cà chua, gồm trang người xem và trang q
 Cần internet khi chạy vì Bootstrap tải từ CDN. Mật khẩu MySQL mặc định của XAMPP là rỗng; nếu khác, sửa `config/config.php`.
 
 ## Chức năng
-**Người xem:** trang chủ; danh sách bài viết có tìm kiếm, lọc theo chuyên mục và giai đoạn sinh trưởng, phân trang; trang chi tiết bài viết (ảnh, bài liên quan, đếm lượt xem); tra cứu sâu bệnh theo tên, loại và nhiều triệu chứng (xếp theo số triệu chứng khớp); tìm kiếm tổng hợp; lịch canh tác tự tính theo ngày gieo (JavaScript).
+**Người xem:** trang chủ; danh sách bài viết có tìm kiếm, lọc theo chuyên mục và giai đoạn sinh trưởng, phân trang; trang chi tiết bài viết (ảnh, bài liên quan, đếm lượt xem); tra cứu sâu bệnh theo tên, loại và nhiều triệu chứng (xếp theo số triệu chứng khớp); tìm kiếm tổng hợp; lịch canh tác tự tính theo ngày gieo, tạo/cập nhật nhiều luống hoặc chậu cùng lúc (lưu trên trình duyệt).
 
 **Quản trị:** đăng nhập/đăng xuất, phân quyền admin/editor; tổng quan thống kê; CRUD bài viết (nháp/đăng, ảnh đại diện, nhiều ảnh), sâu bệnh (gắn triệu chứng, ảnh), triệu chứng, chuyên mục, giai đoạn sinh trưởng; thư viện ảnh; quản lý tài khoản (chỉ admin).
 
