@@ -1,33 +1,39 @@
 /* ====================================================================
    TOMATO GUIDE – style.css
-   Loaded AFTER Bootstrap, so rules here win over Bootstrap defaults.
-   One block per element. Find a section by searching its number (e.g. "6.").
-   1. DESIGN TOKENS (colors – change the look of the whole site here)
-   2. BASE (page background, text color, links)
-   3. HEADER (top menu bar)
-   4. FOOTER
-   5. COMPONENTS (reused on many pages: buttons, badges, cards, headings)
-   6. HOME PAGE (public/index.php)
-   7. PEST LOOKUP PAGE (public/pests.php)
-   8. ARTICLE PAGE (public/post.php)
-   9. CALENDAR PAGE (public/calendar.php)
-   10. ADMIN AREA (admin/*.php)
-   11. RESPONSIVE – home page on phones (header, footer and pest lookup keep their own phone rules inside their sections)
+   File này được nạp SAU Bootstrap nên quy tắc ở đây ghi đè được Bootstrap.
+   Mỗi phần tử một khối. Muốn tìm mục nào, hãy tìm số của mục đó (ví dụ "6.").
+   Cách đặt tên class: khối__phần-tử, ví dụ site-header__brand = logo nằm trong site-header.
+   is-active / is-open là trạng thái (đang chọn / đang mở).
+   1. BIẾN MÀU (đổi màu cả website tại đây)
+   2. NỀN TẢNG (màu nền, màu chữ, liên kết)
+   3. HEADER (thanh menu phía trên)
+   4. FOOTER (chân trang)
+   5. THÀNH PHẦN DÙNG CHUNG (nút, nhãn, thẻ bài viết, tiêu đề mục)
+   6. TRANG CHỦ (public/index.php)
+   7. TRANG TRA CỨU SÂU BỆNH (public/pests.php)
+   8. TRANG BÀI VIẾT (public/post.php)
+   9. TRANG LỊCH CANH TÁC (public/calendar.php)
+   10. KHU QUẢN TRỊ (admin/*.php)
+   11. RESPONSIVE – trang chủ trên điện thoại (header, footer và trang tra cứu có phần responsive riêng nằm trong mục của chúng)
    ==================================================================== */
 
 /* ====================================================================
-   1. DESIGN TOKENS (colors – change the look of the whole site here)
+   1. BIẾN MÀU (đổi màu cả website tại đây)
    ==================================================================== */
 :root {
-  /* Green theme – used by the redesigned parts (home page, calendar, header, footer) */
+  /* Bảng màu xanh – dùng cho phần đã thiết kế lại (trang chủ, lịch, header, footer, tra cứu sâu bệnh) */
   --forest: #174f3a;
   --forest-2: #236646;
   --moss: #a6be83;
   --paper: #f8f7f2;
+  --panel: #f1f3ee;             /* nền xám xanh nhạt của cột lọc */
   --ink: #24352d;
   --line: #e3e8dd;
 
-  /* Original red / leaf colors – still used by the article, pest and admin pages */
+  /* Chiều cao thanh header trên máy tính – cột lọc ở trang tra cứu dùng đúng giá trị này để dính ngay dưới header */
+  --header-height: 64px;
+
+  /* Màu đỏ / xanh lá gốc – vẫn được dùng ở trang bài viết, sâu bệnh (trang chi tiết) và khu quản trị */
   --tomato: #c0392b;
   --tomato-dark: #962d22;
   --leaf: #2e7d32;
@@ -36,7 +42,7 @@
 }
 
 /* ====================================================================
-   2. BASE (page background, text color, links)
+   2. NỀN TẢNG (màu nền, màu chữ, liên kết)
    ==================================================================== */
 body {
   line-height: 1.7;
@@ -47,7 +53,7 @@ a {
   color: var(--forest-2);
 }
 
-/* Hidden on screen but still read by screen readers (same as Bootstrap's .visually-hidden) */
+/* Ẩn trên màn hình nhưng trình đọc màn hình vẫn đọc được (giống .visually-hidden của Bootstrap) */
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -61,13 +67,13 @@ a {
 }
 
 /* ====================================================================
-   3. HEADER (top menu bar)
+   3. HEADER (thanh menu phía trên)
    ==================================================================== */
-/* Bar: stays at the top while scrolling */
+/* Thanh header: luôn dính ở đầu trang khi cuộn */
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 1020;
+  z-index: 1020;                      /* nằm trên nội dung trang (cùng mức với navbar dính của Bootstrap) */
   background: #fff;
   box-shadow: 0 1px 0 rgba(25, 58, 42, .08);
 }
@@ -75,10 +81,10 @@ a {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  min-height: 64px;
+  min-height: var(--header-height);   /* chiều cao cố định → cột lọc biết chỗ để dính bên dưới */
 }
 
-/* Logo / site name */
+/* Logo / tên website */
 .site-header__brand {
   color: var(--forest);
   font-size: 1.25rem;
@@ -91,24 +97,29 @@ a {
   color: var(--forest);
 }
 
-/* Menu links + search box, to the right of the logo */
+/* Menu + ô tìm kiếm, nằm bên phải logo */
 .site-header__menu {
   display: flex;
   flex: 1;
-  align-items: center;
+  align-self: stretch;                /* cao bằng header để gạch chân mục đang chọn chạm đáy header */
   justify-content: space-between;
   gap: 1.5rem;
 }
 .site-menu {
   display: flex;
+  height: 100%;
   gap: .25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+.site-menu li {
+  display: flex;
+}
 .site-menu__link {
-  display: block;
-  padding: 1.1rem .85rem;
+  display: flex;
+  align-items: center;                /* chữ nằm giữa theo chiều dọc */
+  padding: 0 .85rem;
   border-bottom: 2px solid transparent;
   color: #4d6055;
   font-weight: 500;
@@ -117,15 +128,16 @@ a {
 .site-menu__link:hover {
   color: var(--forest);
 }
-.site-menu__link.is-active {
+.site-menu__link.is-active {          /* is-active = trang đang xem */
   color: var(--forest);
   border-bottom-color: var(--forest);
   font-weight: 600;
 }
 
-/* Search box */
+/* Ô tìm kiếm */
 .site-search {
   display: flex;
+  align-self: center;
   gap: .5rem;
 }
 .site-search__input {
@@ -152,7 +164,7 @@ a {
   background: var(--forest-2);
 }
 
-/* Phone menu button (hidden on desktop) */
+/* Nút mở menu trên điện thoại (ẩn trên máy tính) */
 .site-header__toggle {
   display: none;
   margin-left: auto;
@@ -172,7 +184,7 @@ a {
   margin-top: 5px;
 }
 
-/* Keyboard focus ring */
+/* Viền focus khi dùng bàn phím (phím Tab) */
 .site-header__brand:focus-visible,
 .site-header__toggle:focus-visible,
 .site-menu__link:focus-visible,
@@ -181,7 +193,7 @@ a {
   outline-offset: 2px;
 }
 
-/* Tablet and phone: menu folds under the logo, opened by the button */
+/* Máy tính bảng và điện thoại: menu gập xuống dưới logo, mở bằng nút */
 @media (max-width: 991.98px) {
   .site-header__inner {
     flex-wrap: wrap;
@@ -196,16 +208,20 @@ a {
   .site-header__menu {
     flex: 0 0 100%;
     flex-direction: column;
-    align-items: stretch;
+    align-self: auto;
     gap: .5rem;
     padding-bottom: 1rem;
   }
-  /* Only hide the menu when JavaScript is available to open it again */
+  /* Chỉ ẩn menu khi có JavaScript để mở lại (class "js" do header.php thêm vào) */
   .js .site-header__menu:not(.is-open) {
     display: none;
   }
   .site-menu {
     flex-direction: column;
+    height: auto;
+  }
+  .site-menu li {
+    display: block;
   }
   .site-menu__link {
     padding: .8rem .75rem;
@@ -215,6 +231,9 @@ a {
   .site-menu__link.is-active {
     border-left-color: var(--forest);
     background: var(--paper);
+  }
+  .site-search {
+    align-self: stretch;
   }
   .site-search__input {
     flex: 1;
@@ -227,18 +246,22 @@ a {
 }
 
 /* ====================================================================
-   4. FOOTER
+   4. FOOTER (chân trang)
    ==================================================================== */
 .site-footer {
   margin-top: 3rem;
   background: var(--paper);
   color: #5b685f;
 }
+/* Trang rộng (header.php: $page_layout = 'wide'): cột lọc chạm thẳng footer, không chừa khoảng trắng */
+.page-wide + .site-footer {
+  margin-top: 0;
+}
 .site-footer a {
   color: var(--forest);
 }
 
-/* 3 columns: about | explore | admin */
+/* 3 cột: giới thiệu | khám phá | quản trị */
 .site-footer__inner {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
@@ -279,7 +302,7 @@ a {
   text-decoration: underline;
 }
 
-/* Copyright line */
+/* Dòng bản quyền */
 .site-footer__bottom {
   padding: 1rem;
   border-top: 1px solid var(--line);
@@ -295,9 +318,9 @@ a {
 }
 
 /* ====================================================================
-   5. COMPONENTS (reused on many pages: buttons, badges, cards, headings)
+   5. THÀNH PHẦN DÙNG CHUNG (nút, nhãn, thẻ bài viết, tiêu đề mục)
    ==================================================================== */
-/* Post cards */
+/* Thẻ bài viết */
 .card-post {
   border: 1px solid #eee;
   border-radius: .75rem;
@@ -324,7 +347,7 @@ a {
   background: var(--cream);
 }
 
-/* Badges */
+/* Nhãn (badge) */
 .badge-stage {
   background: var(--leaf-soft);
   color: var(--leaf);
@@ -341,7 +364,7 @@ a {
   font-weight: 600;
 }
 
-/* Section headings */
+/* Tiêu đề mục */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -352,7 +375,7 @@ a {
   letter-spacing: .13em;
 }
 
-/* Hero – text */
+/* Hero – chữ */
 .eyebrow-dot {
   height: 7px;
   width: 7px;
@@ -360,7 +383,7 @@ a {
   background: #e36f4d;
 }
 
-/* Section headings */
+/* Tiêu đề mục */
 .section-heading {
   display: flex;
   align-items: end;
@@ -376,7 +399,7 @@ a {
   font-weight: 750;
 }
 
-/* Buttons & links */
+/* Nút & liên kết */
 .text-link {
   flex: 0 0 auto;
   color: var(--forest);
@@ -399,7 +422,7 @@ a {
   text-decoration: none;
 }
 
-/* Post cards */
+/* Thẻ bài viết */
 .latest-section .card-post {
   border-color: var(--line);
   border-radius: .85rem;
@@ -415,7 +438,7 @@ a {
   color: #849087 !important;
 }
 
-/* Notes & empty states */
+/* Ghi chú & trạng thái trống */
 .empty-library {
   display: flex;
   align-items: center;
@@ -476,9 +499,9 @@ a {
 }
 
 /* ====================================================================
-   6. HOME PAGE (public/index.php)
+   6. TRANG CHỦ (public/index.php)
    ==================================================================== */
-/* Hero – text */
+/* Hero – chữ */
 .home-hero {
   min-height: 395px;
   overflow: hidden;
@@ -513,7 +536,7 @@ a {
   margin-bottom: 1.4rem;
 }
 
-/* Hero – search box */
+/* Hero – ô tìm kiếm */
 .hero-search {
   display: flex;
   align-items: center;
@@ -566,7 +589,7 @@ a {
   border-bottom: 1px solid #c4d0bd;
 }
 
-/* Hero – drawn illustration (pure CSS, no image file) */
+/* Hero – hình minh họa vẽ bằng CSS (không dùng file ảnh) */
 .hero-art {
   position: relative;
   align-self: stretch;
@@ -675,7 +698,7 @@ a {
   font-size: .68rem;
 }
 
-/* Feature cards */
+/* Thẻ tính năng */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3,1fr);
@@ -745,7 +768,7 @@ a {
   margin-left: .35rem;
 }
 
-/* Growing-stage track */
+/* Dải giai đoạn sinh trưởng */
 .stage-section {
   padding: 1.55rem;
   border: 1px solid var(--line);
@@ -802,7 +825,7 @@ a {
   margin-left: .25rem;
 }
 
-/* Diagnose banner */
+/* Banner chẩn đoán */
 .diagnose-section {
   display: grid;
   grid-template-columns: .8fr 1.2fr;
@@ -899,7 +922,7 @@ a {
   text-decoration: none;
 }
 
-/* Topic grid */
+/* Lưới chủ đề */
 .topic-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -946,103 +969,347 @@ a {
 }
 
 /* ====================================================================
-   7. PEST LOOKUP PAGE (public/pests.php)
+   7. TRANG TRA CỨU SÂU BỆNH (public/pests.php)
    ==================================================================== */
-/* Symptom filter in the sidebar: one folding block per body part.
-   HTML: <details class="symptom-group"> + <summary class="symptom-group__head"> */
-.symptom-group {
-  margin-bottom: .6rem;
-  border: 1px solid var(--line);
-  border-radius: .6rem;
-  background: #fff;
-  overflow: hidden;
+/* ---- Khung trang: cột lọc bên trái + kết quả bên phải ---- */
+.pest-page {
+  --sidebar-width: clamp(240px, 17vw, 300px);          /* bề rộng cột lọc: nhỏ gọn, co theo màn hình */
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);   /* minmax(0, …) giúp cột kết quả không bị phình ra ngoài */
 }
 
-/* The clickable title row: "LÁ  +" */
+/* ---- Cột lọc ---- */
+.pest-sidebar {
+  background: var(--panel);                             /* nền xám xanh chạy hết chiều cao trang */
+  border-right: 1px solid var(--line);
+}
+.filter-panel {
+  position: sticky;
+  top: var(--header-height);                            /* dính NGAY DƯỚI header, không đè lên header */
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height));           /* vừa đủ một màn hình, phần dài hơn thì cuộn bên trong */
+}
+.filter-panel__scroll {
+  flex: 1;
+  padding: 1.25rem 1.25rem 1rem;
+  overflow-y: auto;
+}
+.filter-panel__title {
+  margin: 0;
+  color: var(--forest);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.filter-panel__hint {
+  margin: .3rem 0 1.4rem;
+  color: #5b685f;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+/* Hai nút luôn hiện ở đáy cột lọc */
+.filter-panel__actions {
+  display: grid;
+  gap: .5rem;
+  padding: .9rem 1.25rem;
+  border-top: 1px solid #d5dbcd;
+  background: var(--panel);
+}
+
+/* ---- Ô nhập "Tên sâu bệnh" và "Loại" ---- */
+.filter-field {
+  margin-bottom: 1.1rem;
+}
+.filter-field__label {                                  /* nhãn nhỏ viết hoa, giống mẫu National Geographic */
+  display: block;
+  margin-bottom: .4rem;
+  color: var(--ink);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.filter-field__input {
+  width: 100%;
+  padding: .5rem .7rem;
+  border: 1px solid #c9cfc3;
+  border-radius: .4rem;
+  color: var(--ink);
+  background: #fff;
+  font-size: .9rem;
+}
+.filter-field__input:focus {
+  border-color: var(--forest-2);
+  outline: 2px solid var(--moss);
+}
+
+/* ---- Bộ lọc triệu chứng: mỗi bộ phận là một khối đóng/mở ----
+   HTML: <details class="symptom-group"> chứa <summary class="symptom-group__head"> (dòng bấm được)
+   và <div class="symptom-group__body"> (các ô tick, chỉ hiện khi khối đang mở) */
+.symptom-group {
+  border-top: 1px solid #c9cfc3;                        /* đường kẻ ngăn giữa các nhóm */
+}
+.symptom-filter .symptom-group:last-child {
+  border-bottom: 1px solid #c9cfc3;
+}
 .symptom-group__head {
   display: flex;
   align-items: center;
-  gap: .75rem;
-  padding: .85rem 1rem;
+  gap: .6rem;
+  padding: .85rem .1rem;
   color: var(--ink);
-  font-size: .9rem;
+  font-size: .75rem;
   font-weight: 700;
-  letter-spacing: .05em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  list-style: none;
+  list-style: none;                                     /* bỏ mũi tên mặc định của trình duyệt */
   cursor: pointer;
   user-select: none;
 }
-.symptom-group__head::-webkit-details-marker {
+.symptom-group__head::-webkit-details-marker {          /* bỏ mũi tên mặc định (Safari / Chrome cũ) */
   display: none;
 }
-.symptom-group__head::after {
-  content: '+';
-  margin-left: auto;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-.symptom-group[open] > .symptom-group__head::after {
-  content: '\2212';   /* the minus sign */
-}
 .symptom-group__head:hover {
-  background: var(--paper);
+  color: var(--forest);
 }
 .symptom-group__head:focus-visible {
   outline: 3px solid var(--moss);
-  outline-offset: -3px;
+  outline-offset: 2px;
 }
 
-/* Small green number = how many boxes are ticked in this group */
+/* Mũi tên ⌄ / ⌃ ở mép phải, vẽ bằng CSS (hai cạnh của một ô vuông xoay 45°) nên luôn nằm GIỮA dòng,
+   không phụ thuộc phông chữ như ký tự ⌄ ⌃.
+   translateY kéo hình lên/xuống một chút vì đỉnh nhọn của mũi tên làm hình lệch khỏi tâm ô vuông.
+   Muốn dùng đúng ký tự thay thế: xóa các dòng width … transform rồi đặt  content: '\2304'  (⌄)
+   và ở trạng thái mở  content: '\2303'  (⌃) */
+.symptom-group__head::after {
+  content: '';
+  flex: none;
+  width: .5rem;
+  height: .5rem;
+  margin: 0 .35rem 0 auto;                              /* auto bên trái = đẩy mũi tên sang mép phải */
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-.18rem) rotate(45deg);         /* ⌄ mũi tên xuống = đang đóng */
+}
+.symptom-group[open] > .symptom-group__head::after {
+  transform: translateY(.1rem) rotate(-135deg);         /* ⌃ mũi tên lên = đang mở */
+}
+
+/* Số nhỏ màu xanh = số triệu chứng đã tick trong nhóm */
 .symptom-group__count {
-  min-width: 1.5rem;
-  padding: 0 .45rem;
+  min-width: 1.4rem;
+  padding: 0 .4rem;
   border-radius: 1rem;
   color: #fff;
   background: var(--forest);
-  font-size: .75rem;
+  font-size: .7rem;
   font-weight: 700;
-  line-height: 1.5rem;
+  letter-spacing: 0;
+  line-height: 1.4rem;
   text-align: center;
 }
 
-/* The checkbox rows that appear when the block is open */
+/* Các ô tick hiện ra khi nhóm đang mở */
 .symptom-group__body {
-  border-top: 1px solid var(--line);
+  padding: 0 .1rem .85rem;
 }
 .symptom-option {
   display: flex;
   align-items: center;
-  gap: .9rem;
-  padding: .7rem 1rem;
-  border-bottom: 1px solid var(--line);
-  background: var(--paper);
+  gap: .65rem;
+  padding: .35rem 0;
+  font-size: .88rem;
   cursor: pointer;
 }
-.symptom-option:last-child {
-  border-bottom: 0;
-}
 .symptom-option:hover {
-  background: #eef3e9;
+  color: var(--forest);
 }
 .symptom-option__box {
-  flex: 0 0 auto;
-  width: 1.25rem;
-  height: 1.25rem;
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
   margin: 0;
-  accent-color: var(--forest);
+  accent-color: var(--forest);                          /* màu dấu tick */
   cursor: pointer;
 }
 .symptom-option__text {
+  line-height: 1.35;
+}
+
+/* ---- Nút "Tra cứu" và "Xóa lựa chọn" ---- */
+.filter-btn {
+  display: block;
+  padding: .6rem 1rem;
+  border: 1.5px solid var(--forest);
+  border-radius: .4rem;
+  color: #fff;
+  background: var(--forest);
+  font-size: .9rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.filter-btn:hover {
+  border-color: var(--forest-2);
+  color: #fff;
+  background: var(--forest-2);
+}
+.filter-btn--ghost {                                    /* nút phụ: chỉ có viền */
+  color: var(--forest);
+  background: transparent;
+}
+.filter-btn--ghost:hover {
+  color: var(--forest);
+  background: #fff;
+}
+
+/* ---- Cột kết quả ---- */
+.pest-results {
+  padding: 1.25rem clamp(1rem, 2.2vw, 2.5rem) 3rem;
+}
+.pest-results__count {
+  margin: 0 0 1.25rem;
+  color: var(--ink);
   font-size: .95rem;
+}
+.pest-empty {
+  padding: 2rem 1.25rem;
+  border: 1px dashed #c9cfc3;
+  border-radius: .5rem;
+  color: #5b685f;
+  background: var(--paper);
+  text-align: center;
+}
+
+/* Lưới thẻ: 3 cột (4 cột trên màn hình rất rộng, 2 cột máy tính bảng, 1 cột điện thoại) */
+.pest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+/* ---- Thẻ sâu bệnh ---- */
+.pest-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  color: var(--ink);
+  background: #fff;
+  text-decoration: none;
+  transition: box-shadow .15s, transform .15s;
+}
+.pest-card:hover {
+  color: var(--ink);
+  box-shadow: 0 8px 22px rgba(25, 58, 42, .12);
+  transform: translateY(-2px);
+}
+.pest-card:focus-visible {
+  outline: 3px solid var(--moss);
+  outline-offset: 2px;
+}
+.pest-card__cover {                                     /* khung ảnh bìa, luôn tỉ lệ 16:10 */
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--panel);
+}
+.pest-card__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                                    /* ảnh lấp đầy khung, tự cắt phần thừa */
+}
+.pest-card__placeholder {                               /* hiện khi chưa có ảnh */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--panel), #e1e9d8);
+}
+.pest-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1rem 1.1rem 1.2rem;
+}
+.pest-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.pest-card__tag {                                       /* màu nền: lớp badge-pest / badge-disease (mục 5) */
+  padding: .2rem .55rem;
+  border-radius: .35rem;
+  font-size: .72rem;
   line-height: 1.4;
+}
+.pest-card__tag--match {                                /* nhãn "Khớp 2/3" */
+  color: #fff;
+  background: var(--forest);
+}
+.pest-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.pest-card__desc {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: #5b685f;
+  font-size: .88rem;
+  line-height: 1.55;
+  -webkit-line-clamp: 3;                                /* cắt mô tả sau 3 dòng */
+  -webkit-box-orient: vertical;
+}
+
+@media (min-width: 1700px) {
+  .pest-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Máy tính bảng và điện thoại: cột lọc nằm trên đầu trang, không dính nữa */
+@media (max-width: 991.98px) {
+  .pest-page {
+    display: block;
+  }
+  .pest-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .filter-panel {
+    position: static;
+    height: auto;
+  }
+  .filter-panel__scroll {
+    overflow: visible;
+  }
+  .pest-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 575.98px) {
+  .pest-results {
+    padding: 1rem;
+  }
+  .pest-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ====================================================================
-   8. ARTICLE PAGE (public/post.php)
+   8. TRANG BÀI VIẾT (public/post.php)
    ==================================================================== */
-/* Article text & images */
+/* Nội dung & ảnh bài viết */
 .article-content h3 {
   margin-top: 1.5rem;
   color: var(--tomato-dark);
@@ -1060,9 +1327,9 @@ a {
 }
 
 /* ====================================================================
-   9. CALENDAR PAGE (public/calendar.php)
+   9. TRANG LỊCH CANH TÁC (public/calendar.php)
    ==================================================================== */
-/* Calendar – intro & form */
+/* Lịch – phần giới thiệu & form */
 .calendar-intro {
   padding: 1.2rem 0 1.5rem;
 }
@@ -1099,7 +1366,7 @@ a {
   background: #103b2a;
 }
 
-/* Calendar – progress */
+/* Lịch – thanh tiến độ */
 .calendar-progress {
   display: flex;
   align-items: center;
@@ -1127,7 +1394,7 @@ a {
   font-size: 1.4rem;
 }
 
-/* Calendar – schedule list */
+/* Lịch – danh sách lịch trình */
 .timeline {
   list-style: none;
   border-left: 3px solid var(--leaf);
@@ -1210,7 +1477,7 @@ a {
   outline-offset: 2px;
 }
 
-/* Calendar – note */
+/* Lịch – ghi chú */
 .calendar-note {
   display: flex;
   gap: .55rem;
@@ -1231,9 +1498,9 @@ a {
 }
 
 /* ====================================================================
-   10. ADMIN AREA (admin/*.php)
+   10. KHU QUẢN TRỊ (admin/*.php)
    ==================================================================== */
-/* Admin */
+/* Quản trị */
 .admin-body {
   background: #f4f6f8;
 }
@@ -1270,17 +1537,17 @@ a {
 }
 
 /* ====================================================================
-   11. RESPONSIVE – home page on phones (header, footer and pest lookup keep their own phone rules inside their sections)
+   11. RESPONSIVE – trang chủ trên điện thoại (header, footer và trang tra cứu có phần responsive riêng nằm trong mục của chúng)
    ==================================================================== */
 @media (max-width: 767px) {
-  /* Hero – text */
+  /* Hero – chữ */
   .home-hero {
     min-height: auto;
     grid-template-columns: 1fr;
     padding: 2rem 1.4rem 1.2rem;
   }
 
-  /* Hero – drawn illustration (pure CSS, no image file) */
+  /* Hero – hình minh họa vẽ bằng CSS (không dùng file ảnh) */
   .hero-art {
     min-height: 175px;
     margin: .5rem -1rem -1.1rem;
@@ -1327,7 +1594,7 @@ a {
     bottom: 0;
   }
 
-  /* Feature cards */
+  /* Thẻ tính năng */
   .feature-grid {
     grid-template-columns: 1fr;
     gap: .7rem;
@@ -1336,7 +1603,7 @@ a {
     min-height: 180px;
   }
 
-  /* Diagnose banner */
+  /* Banner chẩn đoán */
   .diagnose-section {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -1346,12 +1613,12 @@ a {
     font-size: 1.8rem;
   }
 
-  /* Topic grid */
+  /* Lưới chủ đề */
   .topic-grid {
     grid-template-columns: repeat(2,1fr);
   }
 
-  /* Section headings */
+  /* Tiêu đề mục */
   .section-heading {
     align-items: flex-start;
   }
@@ -1360,7 +1627,7 @@ a {
     font-size: .75rem;
   }
 
-  /* Notes & empty states */
+  /* Ghi chú & trạng thái trống */
   .empty-library {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -1375,7 +1642,7 @@ a {
     margin-left: 2rem;
   }
 
-  /* Calendar – progress */
+  /* Lịch – thanh tiến độ */
   .calendar-progress {
     flex-wrap: wrap;
   }
