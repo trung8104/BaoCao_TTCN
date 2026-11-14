@@ -1,9 +1,9 @@
 <?php
 // =====================================================================
-// includes/footer.php – the bottom of EVERY public page
-// (it closes the <main> that header.php opened)
+// includes/footer.php – phần CUỐI của MỌI trang công khai
+// (đóng thẻ <main> mà header.php đã mở)
 //
-// CSS for this file: section "4. FOOTER" in assets/css/style.css
+// CSS của file này: mục "4. FOOTER" trong assets/css/style.css
 // =====================================================================
 ?>
 </main>
@@ -30,7 +30,7 @@
             <ul>
                 <li><a href="<?= url('admin/login.php') ?>">Đăng nhập quản trị</a></li>
             </ul>
-            <!-- TODO (ask the team): add a contact e-mail here if the project has one -->
+            <!-- TODO (hỏi nhóm): thêm email liên hệ ở đây nếu dự án có -->
         </div>
 
     </div>
